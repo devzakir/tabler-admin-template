@@ -92,6 +92,7 @@ gulp.task('sass', function () {
 
 gulp.task('watch', function(cb) {
 	gulp.watch('./scss/**/*.scss', gulp.series('sass'));
+	gulp.watch('./js/**/*.js', gulp.series('js'));
 	cb();
 });
 
@@ -123,4 +124,4 @@ gulp.task('browser-sync', function() {
 	});
 });
 
-gulp.task('start', gulp.series('clean', 'sass', gulp.parallel('watch-jekyll', 'watch', 'browser-sync')));
+gulp.task('start', gulp.series('clean', 'sass', 'js', gulp.parallel('watch-jekyll', 'watch', 'browser-sync')));
