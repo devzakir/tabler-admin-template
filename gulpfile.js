@@ -6,6 +6,7 @@ const gulp = require('gulp'),
 	clean = require('gulp-clean'),
 	postcss = require('gulp-postcss'),
 	path = require('path'),
+	minifyJS = require('gulp-minify'),
 	cleanCSS = require('gulp-clean-css'),
 	rollup = require('gulp-rollup'),
 	rename = require('gulp-rename'),
@@ -54,7 +55,7 @@ gulp.task('clean', function () {
 });
 
 gulp.task('js', function() {
-	return gulp.src('./js/**/*.js')
+	const g = gulp.src('./js/**/*.js')
 		.pipe(rollup({
 			output: {
 				format: 'umd'
@@ -62,6 +63,17 @@ gulp.task('js', function() {
 			input: './js/tabler.js'
 		}))
 		.pipe(gulp.dest(`./${distDir}/js/`));
+
+	if (BUILD || 1===1) {
+		g.pipe(minifyJS({
+			ext: {
+				min: '.min.js'
+			}
+		}))
+			.pipe(gulp.dest(`./${distDir}/js/`));
+	}
+
+	return g;
 });
 
 gulp.task('sass', function () {
@@ -111,8 +123,8 @@ gulp.task('browser-sync', function() {
 				'/node_modules': 'node_modules',
 				'/dist/css': 'tmp-dist/css',
 				'/dist/js': 'tmp-dist/js',
+				'/dist/img': 'img',
 				'/static': 'static',
-				'/img': 'img',
 				'/img-sample': 'img-sample',
 			},
 		},
@@ -125,3 +137,5 @@ gulp.task('browser-sync', function() {
 });
 
 gulp.task('start', gulp.series('clean', 'sass', 'js', gulp.parallel('watch-jekyll', 'watch', 'browser-sync')));
+
+gulp.task('build', gulp.series('clean', 'sass', 'js'));
