@@ -10,7 +10,7 @@ node_modules/
 /_site/
 /.cache/
 .sass-cache/
-
+.tmp/
 .vscode/
 
 /_gh_pages/
